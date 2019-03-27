@@ -21,7 +21,7 @@ setTimeout(itemsRequest, 60000);
 
 function itemsRequest(){
   var options = {
-    url: 'http://openhabianpi:8080/rest/items?recursive=false',
+    url: 'http://openhabianpi.local:8080/rest/items?recursive=false',
     headers: headers
   };
   
@@ -431,7 +431,7 @@ function decodare(peripheral){
 function sendData(dataString, peripheral, type){
 
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: dataString
