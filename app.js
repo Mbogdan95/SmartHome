@@ -73,15 +73,15 @@ function wifiCredentialsCheck(body){
       else if (element.name == "wifi_pwd"){
         wifiOpenHabPwd = element.label;
       }
+
+      if (wifiFileSsid == wifiOpenHabSsid && wifiFilePwd == wifiOpenHabPwd){
+        siteMapCreation(body);
+      } 
+      else{
+        wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd);
+      }
     }
   });
-
-  if (wifiFileSsid == wifiOpenHabSsid && wifiFilePwd == wifiOpenHabPwd){
-    siteMapCreation(body);
-  } 
-  else{
-    wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd);
-  }
 }
 
 function wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd){
