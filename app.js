@@ -11,13 +11,6 @@ var headers = {
   'Accept': 'application/json'
 };
 
-/*
-var whitelist = fs.readFileSync('whitelist.txt').toString().split("\n");
-for (var i in whitelist){
-    whitelist[i] = whitelist[i].replace("\r", "");
-}
-*/
-//itemsRequest();
 appStart();
 BleScan();
 //setTimeout(appStart, 60000);
