@@ -268,13 +268,13 @@ function decodare(peripheral){
       console.log("PIR No Motion");
     }
     if (dataSentBin[5] == 1){
-      var dataString = 'LOW BATTERY';
+      var dataString = 'Battery Level Low';
       var type = '_bat';
       sendData(dataString, peripheral, type);
       console.log("PIR Sensor Low Battery");
     }
     else{
-      var dataString = 'NORMAL BATTERY';
+      var dataString = 'Battery Level Normal';
       var type = '_bat';
       sendData(dataString, peripheral, type);
       console.log("PIR Sensor Normal Battery");
@@ -320,13 +320,13 @@ function decodare(peripheral){
     }
     if (dataSentBin[5] == 1){
       console.log("Door Sensor Low Battery");
-      var dataString = 'LOW BATTERY';
+      var dataString = 'Battery Level Low';
       var type = '_bat';
       sendData(dataString, peripheral, type);
     }
     else{
       console.log("Door Sensor Normal Battery");
-      var dataString = 'NORMAL BATTERY';
+      var dataString = 'Battery Level Normal';
       var type = '_bat';
       sendData(dataString, peripheral, type);
     }
@@ -370,13 +370,13 @@ function decodare(peripheral){
       console.log("Water Sensor noLeak");
     }
     if (dataSentBin[5] == 1){
-      var dataString = 'LOW BATTERY';
+      var dataString = 'Battery Level Low';
       var type = '_bat';
       sendData(dataString, peripheral, type);
       console.log("Water Sensor Low Battery");
     }
     else{
-      var dataString = 'NORMAL BATTERY';
+      var dataString = 'Battery Level Normal';
       var type = '_bat';
       sendData(dataString, peripheral, type);
       console.log("Water Sensor Normal Battery");
