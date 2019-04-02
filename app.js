@@ -253,12 +253,13 @@ function decodare(peripheral){
       var dataString = 'Sensor Not Tempered';
       var type = '_temper';
       sendData(dataString, peripheral, type);
-      console.log("PIR  Not Tempered");
+      console.log("PIR Not Tempered");
     }
     if (dataSentBin[6] == 1){
       var dataString = 'Motion Detected';
       var type = '_pir';
       sendData(dataString, peripheral, type);
+      setTimeout(resetMotion, 30000, dataString, peripheral, type)
       console.log("PIR Motion");
     }
     else{
@@ -454,6 +455,24 @@ function sendData(dataString, peripheral, type){
     method: 'PUT',
     headers: headers,
     body: dataString
+    };
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+      }
+    }
+
+    request(options, callback);
+}
+
+function resetMotion(dataString, peripheral, type){
+  
+  var options = {
+    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    method: 'PUT',
+    headers: headers,
+    body: 'No Motion Detected'
     };
 
     function callback(error, response, body) {
