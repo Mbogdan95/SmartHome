@@ -130,7 +130,7 @@ function siteMapCreation(body){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
         }
         else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
-          sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-')) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}'
+          sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-') - 1) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}\r\n'
         }
         else{
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s]"\r\n';
@@ -152,7 +152,7 @@ function siteMapCreation(body){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
         }
         else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
-          sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-')) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}'
+          sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-') - 1) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}\r\n'
         }
         else{
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s]"\r\n';
