@@ -5,6 +5,7 @@ var request = require('request');
 var Fuse = require('fuse.js');
 
 var groupNamesArray = [];
+var itemsJSON;
 var headers = {
   'Content-Type': 'text/plain',
   'Accept': 'application/json'
@@ -17,17 +18,26 @@ for (var i in whitelist){
 }
 */
 //itemsRequest();
-setTimeout(itemsRequest, 60000);
+appStart();
+BleScan();
+//setTimeout(appStart, 60000);
+
+function appStart(){
+  setInterval(itemsRequest, 5000);
+}
 
 function itemsRequest(){
   var options = {
-    url: 'http://openhabianpi.local:8080/rest/items?recursive=false',
+    url: 'http://openhabianpi:8080/rest/items?recursive=false',
     headers: headers
   };
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      wifiCredentialsCheck(JSON.parse(body))
+      if (body !== itemsJSON){
+        wifiCredentialsCheck(JSON.parse(body))
+        itemsJSON = body;
+      }
     }
   }
   
@@ -39,7 +49,6 @@ function wifiCredentialsCheck(body){
   var wifiFilePwd;
   var wifiOpenHabSsid;
   var wifiOpenHabPwd;
-  var wifiSet;
   var wifiCredentials = fs.readFileSync('/etc/wpa_supplicant/wpa_supplicant.conf').toString().split("\n");
 
   wifiCredentials.forEach(element =>{
@@ -68,11 +77,9 @@ function wifiCredentialsCheck(body){
   });
 
   if (wifiFileSsid == wifiOpenHabSsid && wifiFilePwd == wifiOpenHabPwd){
-    wifiSet = true;
     siteMapCreation(body);
   } 
   else{
-    wifiSet = false;
     wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd);
   }
 }
@@ -86,7 +93,6 @@ function wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd){
   'ssid="' + wifiOpenHabSsid + '" \r\n' +
   'psk="' + wifiOpenHabPwd + '" \r\n' +
   '}';
-
 
   fs.writeFile('/etc/wpa_supplicant/wpa_supplicant.conf', wifiCredentials, function(err, wifiCredentials) {
     if (err) console.log(err);
@@ -158,7 +164,6 @@ function siteMapCreation(body){
   fs.writeFile("/etc/openhab2/sitemaps/ble.sitemap", sitemapData, function(err, sitemapData) {
     if (err) console.log(err);
   })
-  BleScan();
 }
 
 function BleScan(){
@@ -431,7 +436,7 @@ function decodare(peripheral){
 function sendData(dataString, peripheral, type){
 
   var options = {
-    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: dataString
