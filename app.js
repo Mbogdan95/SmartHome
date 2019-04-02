@@ -104,6 +104,10 @@ function wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd){
 
 function siteMapCreation(body){
   var sitemapData = 'sitemap ble label="Your Smart Home" {\r\n'
+  var persistData = 'Strategies {\r\n' + 
+                    'default = everyChange\r\n' + 
+                    '}\r\n' +
+                    'Items {\r\n'
 
   var fuseOptions = {
     keys: ['link'],
@@ -128,16 +132,19 @@ function siteMapCreation(body){
       if (element.type == 'String' && element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
         if (element.category == 'temperature'){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
         }
         else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
           sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-') - 1) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}\r\n'
         }
         else{
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s]"\r\n';
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
         }
       }
       else if (element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
         sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + '"\r\n';
+        persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
       }
     })
     sitemapData = sitemapData + "}\r\n";
@@ -150,22 +157,30 @@ function siteMapCreation(body){
       if (element.type == 'String' && element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
         if (element.category == 'temperature'){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
         }
         else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
           sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-') - 1) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}\r\n'
         }
         else{
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s]"\r\n';
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
         }
       }
       else if (element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
         sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + '"\r\n';
+        persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
       }
     })
     sitemapData = sitemapData + "}\r\n";
 
   })
   sitemapData = sitemapData + "}\r\n";
+  persistData = persistData + '}\r\n'
+
+  fs.writeFile("/etc/openhab2/persistence/mapdb.persist", persistData, function(err, persistData) {
+    if (err) console.log(err);
+  })
 
   fs.writeFile("/etc/openhab2/sitemaps/ble.sitemap", sitemapData, function(err, sitemapData) {
     if (err) console.log(err);
