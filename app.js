@@ -129,7 +129,7 @@ function siteMapCreation(body){
         if (element.category == 'temperature'){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
         }
-        else if (element.category == 'camera'){
+        else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
           sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-')) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}'
         }
         else{
@@ -151,7 +151,7 @@ function siteMapCreation(body){
         if (element.category == 'temperature'){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
         }
-        else if (element.category == 'camera'){
+        else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
           sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-')) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}'
         }
         else{
