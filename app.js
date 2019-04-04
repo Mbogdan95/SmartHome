@@ -310,13 +310,13 @@ function decodare(peripheral){
     if (dataSentBin[6] == 1){
       console.log("Door Sensor Opened");
       var dataString = 'OPEN';
-      var type = '_senz';
+      var type = '_sens';
       sendData(dataString, peripheral, type);
     }
     else{
       console.log("Door Sensor Closed");
       var dataString = 'CLOSED';
-      var type = '_senz'
+      var type = '_sens'
       sendData(dataString, peripheral, type);
     }
     if (dataSentBin[5] == 1){
