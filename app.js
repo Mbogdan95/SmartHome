@@ -4,7 +4,6 @@ var hexToBinary = require("hex-to-binary");
 var request = require('request');
 var Fuse = require('fuse.js');
 
-var groupNamesArray = [];
 var itemsJSON;
 var headers = {
   'Content-Type': 'text/plain',
@@ -101,6 +100,8 @@ function wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd){
 
 
 function siteMapCreation(body){
+  var groupNamesArray = [];
+  var groupLabelsArray = [];
   var sitemapData = 'sitemap ble label="Your Smart Home" {\r\n'
   var persistData = 'Strategies {\r\n' + 
                     'default = everyChange\r\n' + 
@@ -147,34 +148,54 @@ function siteMapCreation(body){
     })
     sitemapData = sitemapData + "}\r\n";
   }
-  groupNamesArray.forEach(element =>{
-    sitemapData = sitemapData + 'Frame label="' + element + '" {\r\n';
 
+  groupNamesArray.forEach(element =>{
+    var fuseOptions = {
+      threshold: 0,
+      keys: ['name'],
+      id: 'label'
+    };
+
+    var fuse = new Fuse(body, fuseOptions)
+    var result = fuse.search(element)
+    result.forEach(element => {
+      if (element != null){
+        if (groupLabelsArray.indexOf(element) == -1){
+          groupLabelsArray.push(element);
+        }
+      }
+    });
+  })
+var counter = 0;
+  groupNamesArray.forEach(element =>{
+    sitemapData = sitemapData + 'Frame label="' + groupLabelsArray[counter] + '" {\r\n';
     var groupArray = body.filter(o => o.groupNames.indexOf(element) === 0)
+    console.log(groupArray)
     groupArray.forEach(element => {
       if (element.type == 'String' && element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
         if (element.category == 'temperature'){
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s °C]"\r\n';
-          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n';
         }
         else if (element.category == 'camera' && element.name.indexOf('camera') !== -1){
           sitemapData = sitemapData + 'Text label="' + element.label.substring(0, element.label.indexOf('-') - 1) + '" icon="camera" {Video url="' + element.label.substring(element.label.indexOf('-') + 2, element.label.length) + '" encoding="mjpeg"}\r\n'
         }
         else{
           sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + ' [%s]"\r\n';
-          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
+          persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n';
         }
       }
-      else if (element.name !== "wifi_ssid" && element.name !== "wifi_pwd"){
+      else if (element.name !== "wifi_ssid" && element.name !== "wifi_pwd" && element.type !== 'Group'){
         sitemapData = sitemapData + 'Default item=' + element.name + ' label="' + element.label + '"\r\n';
-        persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n'
+        persistData = persistData + element.name + ' : strategy = everyChange, restoreOnStartup\r\n';
       }
     })
     sitemapData = sitemapData + "}\r\n";
-
+    
+    counter++;
   })
   sitemapData = sitemapData + "}\r\n";
-  persistData = persistData + '}\r\n'
+  persistData = persistData + '}\r\n';
 
   fs.writeFile("/etc/openhab2/persistence/mapdb.persist", persistData, function(err, persistData) {
     if (err) console.log(err);
@@ -183,6 +204,8 @@ function siteMapCreation(body){
   fs.writeFile("/etc/openhab2/sitemaps/ble.sitemap", sitemapData, function(err, sitemapData) {
     if (err) console.log(err);
   })
+
+  counter = 0
 }
 
 function BleScan(){
