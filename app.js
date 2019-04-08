@@ -58,23 +58,28 @@ function wifiCredentialsCheck(body){
   };
   var fuse = new Fuse(body, fuseOptions)
   var result = fuse.search('wifi')
-  result.forEach(element => {
-    if (element.category == "network"){
-      if(element.name == "wifi_ssid"){
-        wifiOpenHabSsid = element.label;
+  if (result.keys.length != 0){
+    result.forEach(element => {
+      if (element.category == "network"){
+        if(element.name == "wifi_ssid"){
+          wifiOpenHabSsid = element.label;
+        }
+        else if (element.name == "wifi_pwd"){
+          wifiOpenHabPwd = element.label;
+        }
+  
+        if (wifiFileSsid == wifiOpenHabSsid && wifiFilePwd == wifiOpenHabPwd){
+          siteMapCreation(body);
+        } 
+        else{
+          wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd);
+        }
       }
-      else if (element.name == "wifi_pwd"){
-        wifiOpenHabPwd = element.label;
-      }
-
-      if (wifiFileSsid == wifiOpenHabSsid && wifiFilePwd == wifiOpenHabPwd){
-        siteMapCreation(body);
-      } 
-      else{
-        wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd);
-      }
-    }
-  });
+    });
+  }
+  else{
+    siteMapCreation(body);
+  }
 }
 
 function wifiCredentialsSet(body, wifiOpenHabSsid, wifiOpenHabPwd){
