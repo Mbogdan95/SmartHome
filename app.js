@@ -12,7 +12,6 @@ var headers = {
 
 appStart();
 BleScan();
-//setTimeout(appStart, 60000);
 
 function appStart(){
   setInterval(itemsRequest, 5000);
