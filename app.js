@@ -261,10 +261,13 @@ function decodare(peripheral){
   else if (sensorType[3] == 1){
     var sensorType = sensorType;
   } 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// IR Fence
   if (sensorType == 1){
     console.log("IR Fence");
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PIR Detector
   else if (sensorType == 2){
     var dataSent = manufacturerData[11]+manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
@@ -308,15 +311,103 @@ function decodare(peripheral){
       console.log("PIR Sensor Normal Battery");
     }
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Natural Gas Detector
   else if (sensorType == 3){
-    console.log("Natural Gas Detector");
+    var dataSent = manufacturerData[11]+manufacturerData[12];
+    var dataSentBin = hexToBinary(dataSent);
+
+    console.log("Gas Detector")
+    if (dataSentBin[7] == 1){
+      var dataString = 'Sensor Tempered';
+      var type = '_temper';
+      sendData(dataString, peripheral, type);
+      console.log("Gas Sensor Tempered");
+    }
+    else{
+      var dataString = 'Sensor Not Tempered';
+      var type = '_temper';
+      sendData(dataString, peripheral, type);
+      console.log("Gas Not Tempered");
+    }
+    if (dataSentBin[6] == 1){
+      var dataString = 'Gas Detected';
+      var type = '_gas';
+      sendData(dataString, peripheral, type);
+      setTimeout(resetGas, 30000, dataString, peripheral, type)
+      console.log("Gas Detected");
+    }
+    else{
+      var dataString = 'No Gas Detected';
+      var type = '_gas';
+      sendData(dataString, peripheral, type);
+      console.log("No Gas");
+    }
+    if (dataSentBin[5] == 1){
+      var dataString = 'Battery Level Low';
+      var type = '_bat';
+      sendData(dataString, peripheral, type);
+      console.log("Gas Sensor Low Battery");
+    }
+    else{
+      var dataString = 'Battery Level Normal';
+      var type = '_bat';
+      sendData(dataString, peripheral, type);
+      console.log("Gas Sensor Normal Battery");
+    }
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Panic Button
   else if (sensorType == 4){
     console.log("Panic Button");
   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Smoke Detector
   else if (sensorType == 5){
+    var dataSent = manufacturerData[11]+manufacturerData[12];
+    var dataSentBin = hexToBinary(dataSent);
+
     console.log("Smoke Detector")
+    if (dataSentBin[7] == 1){
+      var dataString = 'Sensor Tempered';
+      var type = '_temper';
+      sendData(dataString, peripheral, type);
+      console.log("Smoke Sensor Tempered");
+    }
+    else{
+      var dataString = 'Sensor Not Tempered';
+      var type = '_temper';
+      sendData(dataString, peripheral, type);
+      console.log("Smoke Not Tempered");
+    }
+    if (dataSentBin[6] == 1){
+      var dataString = 'Smoke Detected';
+      var type = '_smoke';
+      sendData(dataString, peripheral, type);
+      setTimeout(resetSmoke, 30000, dataString, peripheral, type)
+      console.log("Smoke Detected");
+    }
+    else{
+      var dataString = 'No Smoke Detected';
+      var type = '_smoke';
+      sendData(dataString, peripheral, type);
+      console.log("No Smoke");
+    }
+    if (dataSentBin[5] == 1){
+      var dataString = 'Battery Level Low';
+      var type = '_bat';
+      sendData(dataString, peripheral, type);
+      console.log("Smoke Sensor Low Battery");
+    }
+    else{
+      var dataString = 'Battery Level Normal';
+      var type = '_bat';
+      sendData(dataString, peripheral, type);
+      console.log("Smoke Sensor Normal Battery");
+    }
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Door Sensor
   else if (sensorType == 6){
     var dataSent = manufacturerData[11]+manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
@@ -362,12 +453,18 @@ function decodare(peripheral){
       console.log("Door Sensor Status Report");
     }
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Glass Break Sensor
   else if (sensorType == 7){
     console.log("Glass Break Sensor");
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Vibration sensor
   else if (sensorType == 8){
     console.log("Vibration Sensor");
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Water Sensor
   else if (sensorType == 9){
     var dataSent = manufacturerData[11]+manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
@@ -413,6 +510,8 @@ function decodare(peripheral){
       console.log("Water Sensor Status Report");
     }
   }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Temp & Hum Sensor
   else if (sensorType == "c"){
     var tempInt = manufacturerData[17]+manufacturerData[18];
     tempInt = parseInt(tempInt, 16);
@@ -439,6 +538,8 @@ function decodare(peripheral){
     console.log("Humidity: " + humInt + "." + humDec + "%");
 
   } 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Remote Control
   else if (sensorType.length == 2 && sensorType[1] == 9){
     var dataSent = manufacturerData[11]+manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
@@ -500,6 +601,42 @@ function resetMotion(dataString, peripheral, type){
     method: 'PUT',
     headers: headers,
     body: 'No Motion Detected'
+    };
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+      }
+    }
+
+    request(options, callback);
+}
+
+function resetSmoke(dataString, peripheral, type){
+  
+  var options = {
+    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    method: 'PUT',
+    headers: headers,
+    body: 'No Smoke Detected'
+    };
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+          console.log(body);
+      }
+    }
+
+    request(options, callback);
+}
+
+function resetGas(dataString, peripheral, type){
+  
+  var options = {
+    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    method: 'PUT',
+    headers: headers,
+    body: 'No Gas Detected'
     };
 
     function callback(error, response, body) {
