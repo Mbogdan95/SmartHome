@@ -19,7 +19,7 @@ function appStart(){
 
 function itemsRequest(){
   var options = {
-    url: 'http://openhabianpi:8080/rest/items?recursive=false',
+    url: 'http://openhabianpi.local:8080/rest/items?recursive=false',
     headers: headers
   };
   
@@ -574,7 +574,7 @@ function decodare(peripheral){
 function sendData(dataString, peripheral, type){
 
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: dataString
@@ -592,7 +592,7 @@ function sendData(dataString, peripheral, type){
 function resetMotion(dataString, peripheral, type){
   
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: 'No Motion Detected'
@@ -610,7 +610,7 @@ function resetMotion(dataString, peripheral, type){
 function resetSmoke(dataString, peripheral, type){
   
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: 'No Smoke Detected'
@@ -628,7 +628,7 @@ function resetSmoke(dataString, peripheral, type){
 function resetGas(dataString, peripheral, type){
   
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + type +'/state',
+    url: 'http://openhabianpi.local:8080/rest/items/' + peripheral.id + type +'/state',
     method: 'PUT',
     headers: headers,
     body: 'No Gas Detected'
