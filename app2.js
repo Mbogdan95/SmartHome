@@ -59,11 +59,22 @@ function BleScan(){
             wifiOpenHabSsid = Buffer(peripheral.advertisement.manufacturerData, "hex").toString().substring(5, Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length)
           }
         }
-        else{
+        else if(peripheral.advertisement.manufacturerData.toString("hex").indexOf("00005746433a") == 0){
+          if(Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length > 6){
+            wifiOpenHabSsid = wifiOpenHabSsid+ Buffer(peripheral.advertisement.manufacturerData, "hex").toString().substring(6, Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length)
+          }
+        }
+        else if(peripheral.advertisement.manufacturerData.toString("hex").indexOf("000050573a") == 0){
           if(Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length > 5){
             wifiOpenHabPwd = Buffer(peripheral.advertisement.manufacturerData, "hex").toString().substring(5, Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length)
           }
         }
+        else if(peripheral.advertisement.manufacturerData.toString("hex").indexOf("00005057433a") == 0){
+          if(Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length > 6){
+            wifiOpenHabPwd = wifiOpenHabPwd + Buffer(peripheral.advertisement.manufacturerData, "hex").toString().substring(6, Buffer(peripheral.advertisement.manufacturerData, "hex").toString().length)
+          }
+        }
+
         if(wifiOpenHabSsid != undefined && wifiOpenHabPwd != undefined){
           console.log(wifiOpenHabSsid)
           console.log(wifiOpenHabPwd)
