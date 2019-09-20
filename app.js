@@ -253,7 +253,7 @@ function decodare(peripheral){
     console.log("Door Sensor");
     if (dataSentBin[6] == 1){
       console.log("Door Sensor Opened");
-      dataString = dataString + 'OPEN;';
+      dataString = dataString + 'OPENED;';
     }
     else{
       console.log("Door Sensor Closed");
