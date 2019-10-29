@@ -119,7 +119,7 @@ function BleScan() {
           })
 
           startAdvertising()
-          setTimeout(stopAdvertising, 5000)
+          setTimeout(stopAdvertising, 6500)
 
           if (!wifiReset) {
             wifiReset = true
