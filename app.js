@@ -123,17 +123,9 @@ function BleScan() {
 
           if (!wifiReset) {
             wifiReset = true
+            
             cmd.get(
-              'sudo systemctl daemon-reload',
-              function (err, data, stderr) {
-                console.log('Command data:', data)
-                console.log('Command error: ', err)
-                console.log('Command stderr: ', stderr)
-              }
-            );
-
-            cmd.get(
-              'sudo systemctl restart dhcpcd',
+              'sudo wpa_cli -i wlan0 reconfigure',
               function (err, data, stderr) {
                 console.log('Command data:', data)
                 console.log('Command error: ', err)
