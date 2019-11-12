@@ -472,7 +472,7 @@ function decodare(peripheral) {
 function sendData(dataString, peripheral) {
 
   var options = {
-    url: 'http://openhabianpi:8080/rest/items/' + peripheral.id + '/state',
+    url: 'http://bhome:8080/rest/items/' + peripheral.id + '/state',
     method: 'PUT',
     headers: headers,
     body: dataString
