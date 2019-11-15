@@ -221,7 +221,7 @@ function decodare(peripheral) {
     var dataSent = manufacturerData[11] + manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
     var dataString = ""
-    var dataStringReset = "NO GAS DETECTED"
+    var dataStringReset = "NO GAS DETECTED;"
     console.log("Gas Detector")
 
     if (dataSentBin[6] == 1) {
@@ -268,7 +268,7 @@ function decodare(peripheral) {
     var dataSent = manufacturerData[11] + manufacturerData[12];
     var dataSentBin = hexToBinary(dataSent);
     var dataString = ""
-    var dataStringReset = "NO SMOKE DETECTED"
+    var dataStringReset = "NO SMOKE DETECTED;"
     console.log("Smoke Detector")
     if (dataSentBin[6] == 1) {
       dataString = dataS + 'SMOKE DETECTED;';
