@@ -125,7 +125,7 @@ function BleScan() {
             wifiReset = true
             
             cmd.get(
-              'sudo wpa_cli -i wlan0 reconfigure',
+              'sudo reboot',
               function (err, data, stderr) {
                 console.log('Command data:', data)
                 console.log('Command error: ', err)
